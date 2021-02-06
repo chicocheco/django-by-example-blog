@@ -10,6 +10,7 @@ def post_list(request):
 
 
 def post_detail(request, year, month, day, post):
+    # get unique object via slug and publish
     post = get_object_or_404(Post, slug=post,
                              status='published',
                              publish__year=year,
