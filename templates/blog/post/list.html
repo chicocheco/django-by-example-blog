@@ -16,6 +16,6 @@
         {{ post.body|truncatewords:30|linebreaks }}
     {% endfor %}
 
-    {# pass 'posts' object to pagination html renamed to 'page' (it's reusable this way) #}
-    {% include 'pagination.html' with page=posts %}
+    {# pass 'page_obj' object to pagination html renamed to 'page' (it's reusable this way) #}
+    {% include 'pagination.html' with page=page_obj %}
 {% endblock content %}
