@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post
+from .models import Post, Comment
 
 
 @admin.register(Post)  # admin.site.register()
@@ -12,3 +12,10 @@ class PostAdmin(admin.ModelAdmin):
     raw_id_fields = ('author',)  # lookup widget
     date_hierarchy = 'publish'  # display date hierarchy navigation
     ordering = ('status', 'publish')  # order by status, then by publish
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'post', 'created', 'active')
+    list_filter = ('active', 'created', 'updated')
+    search_fields = ('name', 'email', 'body')
