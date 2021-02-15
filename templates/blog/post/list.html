@@ -1,4 +1,5 @@
 {% extends "blog/_base.html" %}
+{% load blog_tags %}
 
 {% block title %}My Blog{% endblock title %}
 
@@ -26,7 +27,8 @@
         <p class="date">
             Published {{ post.publish }} by {{ post.author }}
         </p>
-        {{ post.body|truncatewords:30|linebreaks }}
+        {# truncatewords_html filter truncates a string after a certain number of word avoiding unclosed HTML tags #}
+        {{ post.body|markdown|truncatewords_html:30 }}
     {% endfor %}
 
     {# pass 'page_obj' from ListView or 'posts' object to pagination html renamed to 'page' (it's reusable this way) #}

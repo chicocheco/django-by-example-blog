@@ -1,5 +1,8 @@
-from django.db.models import Count
+import markdown
 from django import template
+from django.db.models import Count
+from django.utils.safestring import mark_safe
+
 from ..models import Post
 
 register = template.Library()
@@ -21,3 +24,9 @@ def get_most_commented_posts(count=5):
     return Post.published.annotate(
         total_comments=Count('comments')
     ).order_by('-total_comments')[:count]
+
+
+@register.filter(name='markdown')
+def markdown_format(text):
+    # mark_safe() - mark as safe to allow output full html like '<p>' and not '&lt;p&gt;', not escaped chars
+    return mark_safe(markdown.markdown(text))
