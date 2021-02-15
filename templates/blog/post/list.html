@@ -4,18 +4,31 @@
 
 {% block content %}
     <h1>My Blog</h1>
+    {% if tag %}
+        <h2>Posts tagged with "{{ tag.name }}"</h2>
+    {% endif %}
     {% for post in posts %}
         <h2>
             <a href="{{ post.get_absolute_url }}">
                 {{ post.title }}
             </a>
         </h2>
+        <p class="tags">
+            {# nested loop - tags with links to posts including this specific tag #}
+            Tags:
+            {% for tag in post.tags.all %}
+                <a href="{% url "blog:post_list_by_tag" tag.slug %}">
+                    {{ tag.name }}
+                </a>
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
         <p class="date">
             Published {{ post.publish }} by {{ post.author }}
         </p>
         {{ post.body|truncatewords:30|linebreaks }}
     {% endfor %}
 
-    {# pass 'page_obj' object to pagination html renamed to 'page' (it's reusable this way) #}
-    {% include 'pagination.html' with page=page_obj %}
+    {# pass 'page_obj' from ListView or 'posts' object to pagination html renamed to 'page' (it's reusable this way) #}
+    {% include 'pagination.html' with page=posts %}
 {% endblock content %}
