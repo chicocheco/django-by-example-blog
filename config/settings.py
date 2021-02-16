@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+from os import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -18,13 +18,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 's@rst(civ_-+i_d3ks-^6c&f9v$6b2z7%lvh)a3x^#n9nt!(p('
+# read environmental variables from docker-compose file
+ENVIRONMENT = environ.get('ENVIRONMENT', default='development')
+SECRET_KEY = environ.get('SECRET_KEY')
+DEBUG = int(environ.get('DEBUG', default=0))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', ]
 
 # Application definition
 

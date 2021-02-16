@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  web:
+    user: "1000:1000"
+    build: .
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    environment:
+      - ENVIRONMENT=development
+      - SECRET_KEY=s@rst(civ_-+i_d3ks-^6c&f9v$$6b2z7%lvh)a3x^#n9nt!(p(
+      - DEBUG=1
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
