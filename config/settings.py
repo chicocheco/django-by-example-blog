@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
 
-    'django.contrib.postgres',  # for search lookup
+    'django.contrib.postgres',  # for __search lookup or SearchVector for multiple fields
 
     # local
     'blog.apps.BlogConfig',
