@@ -1,4 +1,4 @@
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramSimilarity
 from django.core.mail import send_mail
 from django.db.models import Count
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -103,14 +103,18 @@ def post_search(request):
         if form.is_valid():
             query = form.cleaned_data['query']
             # rank A = 1.0, B = 0.4
-            search_vector = SearchVector('title', weight='A') + \
-                            SearchVector('body', weight='B')
-            search_query = SearchQuery(query)
+            # search_vector = SearchVector('title', weight='A') + \
+            #                 SearchVector('body', weight='B')
+            # search_query = SearchQuery(query)
             # filter the results to display only the ones with a rank higher than 0.3 .
+            # results = Post.published.annotate(
+            #     search=search_vector,
+            #     rank=SearchRank(search_vector, search_query)
+            # ).filter(rank__gte=0.3).order_by('-rank')
+
             results = Post.published.annotate(
-                search=search_vector,
-                rank=SearchRank(search_vector, search_query)
-            ).filter(rank__gte=0.3).order_by('-rank')
+                similarity=TrigramSimilarity('title', query)  # CREATE EXTENSION pg_trgm;
+            ).filter(similarity__gt=0.1).order_by('-similarity')
     return render(request,
                   'blog/post/search.html',
                   {'form': form,
